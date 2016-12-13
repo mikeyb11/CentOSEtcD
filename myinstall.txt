@@ -24,11 +24,6 @@ stop on runlevel [016]
 respawn
 respawn limit 10 5
 
-script
-  if [ -f "/etc/default/etcd" ]; then
-    . /etc/default/etcd
-  fi
-
 ## change to your specified directory  
 chdir /opt/etcd-v2.0.9-linux-amd64
 exec etcd >>/var/log/etcd.log 2>&1
