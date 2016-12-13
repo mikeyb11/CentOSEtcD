@@ -36,17 +36,17 @@ end script
 # Override file for etcd Upstart script providing some environment variables
 # change the ips to match your cluster machines
 env ETCD_INITIAL_CLUSTER=
-"etcd-01=http://192.168.1.101:2380,
-etcd-02=http://192.168.1.102:2380,
-etcd-03=http://192.168.1.103:2380"
+"etcd-01=http://192.168.1.57:2380,
+etcd-02=http://192.168.1.58:2380,
+etcd-03=http://192.168.1.59:2380"
 
 env ETCD_INITIAL_CLUSTER_STATE="new"
 env ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster-01"
-env ETCD_INITIAL_ADVERTISE_PEER_URLS="http://192.168.1.101:2380"
+env ETCD_INITIAL_ADVERTISE_PEER_URLS="http://192.168.1.57:2380"
 env ETCD_DATA_DIR="/var/etcd"
-env ETCD_LISTEN_PEER_URLS="http://192.168.1.101:2380"
-env ETCD_LISTEN_CLIENT_URLS="http://192.168.1.101:2379"
-env ETCD_ADVERTISE_CLIENT_URLS="http://192.168.1.101:2379"
+env ETCD_LISTEN_PEER_URLS="http://192.168.1.57:2380"
+env ETCD_LISTEN_CLIENT_URLS="http://192.168.1.57:2379"
+env ETCD_ADVERTISE_CLIENT_URLS="http://192.168.1.57:2379"
 env ETCD_NAME="etcd-01"
 
 
