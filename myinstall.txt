@@ -1,0 +1,64 @@
+## -- actions taken to install CoreOS and EtcD
+
+
+#### ---- http://blog.scottlowe.org/2015/04/15/running-etcd-20-cluster/ ----####
+## -- installing base CoreOS
+
+## -- create a directory to install to -- used /opt for my install
+curl -L  https://github.com/coreos/etcd/releases/download/v2.0.9/etcd-v2.0.9-linux-amd64.tar.gz -o etcd-v2.0.9-linux-amd64.tar.gz
+tar xzvf etcd-v2.0.9-linux-amd64.tar.gz
+cd etcd-v2.0.9-linux-amd64
+####  ./etcd
+
+## -- Configuring etcd and turning up the cluster
+## -- using an upstart script for etcd -- optional step
+## -- saved in /etc/init as etcd.conf
+description "etcd 2.0 distributed key-value store"
+author "Michael Brewster <michael.brewster@qa.com>" ## change to you
+
+start on (net-device-up
+          and local-filesystems
+          and runlevel [2345])
+stop on runlevel [016]
+
+respawn
+respawn limit 10 5
+
+script
+  if [ -f "/etc/default/etcd" ]; then
+    . /etc/default/etcd
+  fi
+
+## change to your specified directory  
+chdir /opt/etcd-v2.0.9-linux-amd64
+exec etcd >>/var/log/etcd.log 2>&1
+end script
+
+## -- override file
+## -- used to keep the upstart file clean
+## -- stores enviroment variables 
+## -- reasons are in the word doc
+# Override file for etcd Upstart script providing some environment variables
+# change the ips to match your cluster machines
+env ETCD_INITIAL_CLUSTER=
+"etcd-01=http://192.168.1.101:2380,
+etcd-02=http://192.168.1.102:2380,
+etcd-03=http://192.168.1.103:2380"
+
+env ETCD_INITIAL_CLUSTER_STATE="new"
+env ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster-01"
+env ETCD_INITIAL_ADVERTISE_PEER_URLS="http://192.168.1.101:2380"
+env ETCD_DATA_DIR="/var/etcd"
+env ETCD_LISTEN_PEER_URLS="http://192.168.1.101:2380"
+env ETCD_LISTEN_CLIENT_URLS="http://192.168.1.101:2379"
+env ETCD_ADVERTISE_CLIENT_URLS="http://192.168.1.101:2379"
+env ETCD_NAME="etcd-01"
+
+
+
+
+
+
+
+
+
